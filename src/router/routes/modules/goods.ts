@@ -8,7 +8,7 @@ const GOODS: AppRouteRecordRaw = {
   meta: {
     locale: '商品',
     requiresAuth: true,
-    icon: 'icon-dashboard',
+    icon: 'icon-gift',
     order: 1
   },
   children: [
