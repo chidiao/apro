@@ -9,6 +9,13 @@ export default mergeConfig(
       fs: {
         strict: true,
       },
+      proxy: {
+        "/api": {
+          target: "http://192.168.0.77:8081",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ""),
+        },
+      },
     },
     plugins: [],
   },
