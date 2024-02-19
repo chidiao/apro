@@ -1,21 +1,21 @@
 import { DEFAULT_LAYOUT } from '../base'
 import { AppRouteRecordRaw } from '../types'
 
-const GOODS: AppRouteRecordRaw = {
-  path: '/goods',
-  name: 'goods',
+const USER: AppRouteRecordRaw = {
+  path: '/user',
+  name: 'user',
   component: DEFAULT_LAYOUT,
   meta: {
-    locale: '商品管理',
+    locale: '用户管理',
     requiresAuth: true,
-    icon: 'icon-gift',
+    icon: 'icon-user',
     order: 1
   },
   children: [
     {
       path: 'list',
-      name: 'goodsList',
-      component: () => import('@/views/goods/list.vue'),
+      name: 'userList',
+      component: () => import('@/views/user/list.vue'),
       meta: {
         locale: '列表',
         requiresAuth: true,
@@ -25,4 +25,4 @@ const GOODS: AppRouteRecordRaw = {
   ]
 }
 
-export default GOODS
+export default USER

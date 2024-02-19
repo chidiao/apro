@@ -28,3 +28,10 @@ export function getUserInfo() {
 export function getMenuList() {
   return axios.post<RouteRecordNormalized[]>('/api/user/menu')
 }
+
+export function getUserList(page = 1, pageSize = 10) {
+  return axios.post<any[]>('/v1/irisUser/userList', {
+    page,
+    page_size: pageSize
+  })
+}

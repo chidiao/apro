@@ -1,12 +1,12 @@
 <template>
   <div class="p-4">
-    <div class="p-4 bg-white">
+    <a-card title="商品列表">
       <a-table :columns="cols" :data="table" />
-    </div>
+    </a-card>
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { getGoodsList } from '@/api/goods'
 import { onMounted, ref } from 'vue'
 
@@ -27,7 +27,7 @@ const cols = [
 const table = ref([])
 
 onMounted(async () => {
-  const { data, error } = await getGoodsList()
+  const { data } = await getGoodsList()
   if (data) {
     let { list } = data
     table.value = list
