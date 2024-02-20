@@ -1,5 +1,5 @@
 import debug from './env'
-import { SUCCESS_CODE } from '@/api/interceptor.ts'
+import { SUCCESS_CODE } from '@/api/interceptor'
 
 export default ({ mock, setup }: { mock?: boolean; setup: () => void }) => {
   if (mock !== false && debug) setup()

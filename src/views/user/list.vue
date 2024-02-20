@@ -12,7 +12,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { onMounted, ref } from 'vue'
 import { getUserList } from '@/api/user'
 
