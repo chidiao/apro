@@ -21,6 +21,16 @@ const GOODS: AppRouteRecordRaw = {
         requiresAuth: true,
         roles: ['*']
       }
+    },
+    {
+      path: 'edit',
+      name: 'goodsEdit',
+      component: () => import('@/views/goods/edit.vue'),
+      meta: {
+        locale: '编辑',
+        requiresAuth: true,
+        roles: ['*']
+      }
     }
   ]
 }
