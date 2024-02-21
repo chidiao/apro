@@ -28,7 +28,9 @@ axios.interceptors.request.use(
       if (!config.headers) {
         config.headers = {}
       }
-      config.headers.Authorization = `Bearer ${token}`
+      // config.headers.Authorization = `Bearer ${token}`
+      config.headers['XX-Token'] = token
+      config.headers['XX-Lang'] = localStorage.getItem('arco-locale') ?? 'zh-CN'
     }
     return config
   },
@@ -48,7 +50,9 @@ axios.interceptors.response.use(
         duration: 5 * 1000
       })
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if ([50008, 50012, 50014].includes(res.code) && response.config.url !== '/api/user/info') {
+      // if ([50008, 50012, 50014].includes(res.code) && response.config.url !== '/api/user/info') {
+      // 10001: Invalid token;
+      if ([10001].includes(res.code)) {
         Modal.error({
           title: 'Confirm logout',
           content: 'You have been logged out, you can cancel to stay on this page, or log in again',
