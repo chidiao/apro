@@ -16,6 +16,10 @@ export const editGood = (form: any) => {
   return axios.post('/v1/goods/goodsEdit', form)
 }
 
+export const setFreeGood = (uid: string, isFree: number) => {
+  return axios.post('/v1/goods/goodsFree', { goods_uid: uid, is_free: isFree })
+}
+
 export const deleteGood = (uid: string) => {
   return axios.post('/v1/goods/goodsDel', { goods_uid: uid })
 }

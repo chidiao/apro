@@ -6,6 +6,26 @@
       </div>
 
       <a-table :columns="cols" :data="table" :loading="loading">
+        <template #free="{ record }">
+          <a-switch
+            v-model="record.is_free"
+            checked-color="blue"
+            :checked-value="1"
+            unchecked-color="gray"
+            :unchecked-value="0"
+            :before-change="(e) => switchToFree(e, record.goods_uid)"
+          >
+            <template #checked> 是 </template>
+            <template #unchecked> 否 </template>
+          </a-switch>
+        </template>
+
+        <template #cover="{ record }">
+          <a-avatar shape="square">
+            <img :src="record.list_picture_text" alt="cover" />
+          </a-avatar>
+        </template>
+
         <template #action="{ record }">
           <div class="space-x-2">
             <a-button type="primary" @click="onEdit(record)">修改</a-button>
@@ -29,7 +49,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { getGoodsList, deleteGood } from '@/api/goods'
+import { getGoodsList, setFreeGood, deleteGood } from '@/api/goods'
 import GoodsEdit from './components/edit.vue'
 
 const cols = [
@@ -46,16 +66,14 @@ const cols = [
     dataIndex: 'price'
   },
   {
-    title: 'list_picture',
-    dataIndex: 'list_picture',
-    ellipsis: true,
-    width: 200
+    title: '是否免费',
+    dataIndex: 'is_free',
+    slotName: 'free'
   },
   {
-    title: 'detail_picture',
-    dataIndex: 'detail_picture',
-    ellipsis: true,
-    width: 200
+    title: '封面',
+    dataIndex: 'list_picture',
+    slotName: 'cover'
   },
   {
     title: '操作',
@@ -67,11 +85,14 @@ const table = ref([])
 const loading = ref(false)
 const getTable = async () => {
   loading.value = true
-  const { data } = await getGoodsList()
-  loading.value = false
-  if (data) {
-    let { list } = data
-    table.value = list
+  try {
+    const { data } = await getGoodsList()
+    if (data) {
+      let { list } = data
+      table.value = list
+    }
+  } finally {
+    loading.value = false
   }
 }
 
@@ -98,6 +119,15 @@ const onDel = async (uid = null) => {
 const router = useRouter()
 const toDetail = (uid = null) => {
   router.push(uid ? `/goods/edit?uid=${uid}` : '/goods/edit')
+}
+
+const switchToFree = async (is_free: any, uid = '') => {
+  try {
+    await setFreeGood(uid, is_free)
+    return true
+  } catch {
+    return false
+  }
 }
 
 onMounted(() => {
