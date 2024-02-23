@@ -1,9 +1,10 @@
 <template>
   <div class="p-4">
-    <a-card title="用户列表">
+    <a-card title="子用户列表">
       <a-table
         :columns="cols"
         :data="table"
+        :stripe="stripe"
         :loading="loading"
         :pagination="pagination"
         @pageChange="(p) => getList(p)"
@@ -14,7 +15,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { getUserList } from '@/api/user'
+import { getSubList } from '@/api/account'
 
 const cols = [
   {
@@ -22,36 +23,30 @@ const cols = [
     dataIndex: 'id'
   },
   {
-    title: 'uid',
-    dataIndex: 'uid'
+    title: '账户类型',
+    dataIndex: 'user_type'
   },
   {
-    title: '用户名',
-    dataIndex: 'user_realname'
+    title: 'ID',
+    dataIndex: 'id'
   },
   {
-    title: '昵称',
-    dataIndex: 'user_nickname'
+    title: 'ID',
+    dataIndex: 'id'
   },
-  {
-    title: '性别',
-    dataIndex: 'gender',
-    render({ record }) {
-      return record.gender === 1 ? '男' : '女'
-    }
-  }
 ]
 const table = ref([])
 const loading = ref(false)
+const stripe = ref(true)
 const pagination = ref({
   current: 1,
-  pageSize: 10,
+  pageSize: 20,
   total: 0
 })
 
 const getList = async (page = pagination.value.current) => {
   loading.value = true
-  const { data } = await getUserList(page, pagination.value.pageSize)
+  const { data } = await getSubList(page, pagination.value.pageSize)
   loading.value = false
   if (data) {
     let { list, current_page, page_size, total } = data
