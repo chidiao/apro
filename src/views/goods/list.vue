@@ -21,9 +21,9 @@
         </template>
 
         <template #cover="{ record }">
-          <a-avatar shape="square">
-            <img :src="record.list_picture_text" alt="cover" />
-          </a-avatar>
+          <a-tooltip :content="record.list_picture_text" mini>
+            <a-avatar shape="square" :image-url="record.list_picture_text"></a-avatar>
+          </a-tooltip>
         </template>
 
         <template #action="{ record }">
