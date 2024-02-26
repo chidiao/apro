@@ -31,6 +31,26 @@ const GOODS: AppRouteRecordRaw = {
         requiresAuth: true,
         roles: ['*']
       }
+    },
+    {
+      path: 'editor',
+      name: 'goodsEditor',
+      component: () => import('@/views/goods/editor.vue'),
+      meta: {
+        locale: '编辑器',
+        requiresAuth: true,
+        roles: ['*']
+      }
+    },
+    {
+      path: 'long',
+      name: 'goodsLong',
+      component: () => import('@/views/goods/long.vue'),
+      meta: {
+        locale: '长页面',
+        requiresAuth: true,
+        roles: ['*']
+      }
     }
   ]
 }
