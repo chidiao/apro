@@ -13,8 +13,7 @@
 </template>
 
 <script setup>
+import { UPLOAD_URL } from '@/api/apis'
 import { getToken } from '@/utils/auth'
 const token = getToken()
-
-const UPLOAD_URL = 'http://192.168.0.77:8081/v1/upload/picture'
 </script>

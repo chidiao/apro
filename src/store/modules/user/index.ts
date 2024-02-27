@@ -50,9 +50,15 @@ const useUserStore = defineStore('user', {
 
     // Get user's information
     async info() {
-      const res = await getUserInfo()
+      // const res = await getUserInfo()
+      // this.setInfo(res.data)
 
-      this.setInfo(res.data)
+      this.setInfo({
+        name: 'admin',
+        avatar:
+          'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp',
+        role: 'admin'
+      })
     },
 
     // Login
@@ -74,11 +80,12 @@ const useUserStore = defineStore('user', {
     },
     // Logout
     async logout() {
-      try {
-        await userLogout()
-      } finally {
-        this.logoutCallBack()
-      }
+      // try {
+      //   await userLogout()
+      // } finally {
+      //   this.logoutCallBack()
+      // }
+      this.logoutCallBack()
     }
   }
 })

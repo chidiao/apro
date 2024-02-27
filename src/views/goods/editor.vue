@@ -10,24 +10,26 @@
         @onCreated="handleCreated"
       />
     </a-card>
+
+    <FixedBottomBar>
+      <div class="w-full p-4 flex justify-end">
+        <a-button type="primary" @click="onSave">保存</a-button>
+      </div>
+    </FixedBottomBar>
   </div>
 </template>
 
 <script setup>
 import { onBeforeUnmount, ref, shallowRef, onMounted } from 'vue'
-import '@wangeditor/editor/dist/css/style.css' // 引入 css
+import '@wangeditor/editor/dist/css/style.css'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+import { Message } from '@arco-design/web-vue'
 import { getToken } from '@/utils/auth'
+import { UPLOAD_URL } from '@/api/apis'
 const token = getToken()
-const UPLOAD_URL = 'http://192.168.0.77:8081/v1/upload/picture'
 
 const editorRef = shallowRef()
-const valueHtml = ref('<p>hello</p>')
-onMounted(() => {
-  setTimeout(() => {
-    valueHtml.value = '<p>模拟 Ajax 异步设置内容</p>'
-  }, 1500)
-})
+const valueHtml = ref('')
 
 const mode = 'default'
 const toolbarConfig = {}
@@ -42,10 +44,16 @@ const editorConfig = {
       meta: {
         folder: 'goods'
       },
-      onSuccess(file, res) {
-        // TS 语法
-        // onSuccess(file, res) {          // JS 语法
-        console.log(`${file.name} 上传成功`, res)
+      fieldName: 'file',
+      customInsert(res, insertFn) {
+        const { code, msg } = res
+
+        if (code) {
+          const { url } = res.data
+          insertFn(url, '', url)
+        } else {
+          Message.error(msg)
+        }
       }
     }
   }
@@ -59,5 +67,9 @@ onBeforeUnmount(() => {
 
 const handleCreated = (editor) => {
   editorRef.value = editor
+}
+
+const onSave = () => {
+  console.log(valueHtml.value)
 }
 </script>
