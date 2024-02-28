@@ -13,8 +13,8 @@ const ACCOUNTS: AppRouteRecordRaw = {
   },
   children: [
     {
-      path: 'iris-account',
-      name: 'irisAccount',
+      path: 'main',
+      name: 'accountMainList',
       component: () => import('@/views/account/list.vue'),
       meta: {
         locale: '注册账户',
@@ -24,14 +24,37 @@ const ACCOUNTS: AppRouteRecordRaw = {
       }
     },
     {
-      path: 'iris-sub-account',
-      name: 'irisSubAccount',
+      path: 'main/detail',
+      name: 'accountMainDetail',
+      component: () => import('@/views/account/detail.vue'),
+      meta: {
+        locale: '注册账户详情',
+        requiresAuth: true,
+        roles: ['*'],
+        hideInMenu: true
+      }
+    },
+    {
+      path: 'sub',
+      name: 'accountSub',
       component: () => import('@/views/account/sub.vue'),
       meta: {
         locale: '子账户',
         requiresAuth: true,
         icon: 'icon-idcard',
         roles: ['*']
+      }
+    },
+    {
+      path: 'sub/detail',
+      name: 'accountSubDetail',
+      component: () => import('@/views/account/sub-detail.vue'),
+      meta: {
+        locale: '子账户详情',
+        requiresAuth: true,
+        icon: 'icon-idcard',
+        roles: ['*'],
+        hideInMenu: true
       }
     }
   ]

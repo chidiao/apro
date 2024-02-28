@@ -1,12 +1,15 @@
 import axios from 'axios'
 
-export const getAccountList = (page = 1, pageSize = 10) => {
+export const getAccountList = (page = 1, pageSize = 20) => {
   return axios.post<any[]>('/v1/irisUser/userList', {
     page,
     page_size: pageSize
   })
 }
 
-export const getSubList = () => {
-  return axios.get('/v1/irisUser/subList')
+export const getSubList = (page = 1, pageSize = 20) => {
+  return axios.post('/v1/irisUser/subList', {
+    page,
+    page_size: pageSize
+  })
 }
