@@ -24,7 +24,7 @@ const ACCOUNTS: AppRouteRecordRaw = {
       }
     },
     {
-      path: 'main/detail',
+      path: 'main-detail',
       name: 'accountMainDetail',
       component: () => import('@/views/account/detail.vue'),
       meta: {
@@ -46,7 +46,7 @@ const ACCOUNTS: AppRouteRecordRaw = {
       }
     },
     {
-      path: 'sub/detail',
+      path: 'sub-detail',
       name: 'accountSubDetail',
       component: () => import('@/views/account/sub-detail.vue'),
       meta: {

@@ -6,6 +6,7 @@
         :data="table"
         :stripe="stripe"
         :loading="loading"
+        :scroll="scroll"
         :pagination="pagination"
         @pageChange="(p) => getList(p)"
       >
@@ -24,66 +25,108 @@
 import { onMounted, ref } from 'vue'
 import { getSubList } from '@/api/account'
 import { useRouter } from 'vue-router'
+import { TableColumnData } from '@arco-design/web-vue/es/table/interface'
 
-const cols = [
+const cols: TableColumnData[] = [
   {
     title: 'ID',
-    dataIndex: 'id'
+    dataIndex: 'id',
+    width: 80
   },
   {
     title: '账户类型',
     dataIndex: 'user_type',
+    width: 100,
     render({ record }: any) {
-      let user_type_text = record.user_type == 1 ? '主账户' : '子账户'
-      let color = record.user_type == 1 ? 'green' : 'gray'
-      return <a-tag color={color}>{user_type_text}</a-tag>
+      //1主账户,2子账户
+      let field = record.user_type
+      let text = record.user_type_text || '-'
+      const obj_explain: any = {
+        1: { color: 'green' },
+        2: { color: 'blue' },
+        default: { color: 'gray' }
+      }
+      let color = obj_explain?.[field]?.color ?? obj_explain['default']['color']
+
+      return <a-tag color={color}>{text}</a-tag>
     }
   },
   {
     title: '所属用户',
-    dataIndex: 'account_realname'
+    dataIndex: 'account_realname',
+    width: 100
   },
   {
     title: '真实姓名',
-    dataIndex: 'user_realname'
-  },
-  {
-    title: '身份证',
-    dataIndex: 'id_card'
+    dataIndex: 'user_realname',
+    width: 100
   },
   {
     title: '性别',
     dataIndex: 'gender',
+    width: 70,
     render({ record }: any) {
-      let gender_text, color
-      switch (record.gender) {
-        case 1:
-          gender_text = '男'
-          color = 'blue'
-          break
-        case 2:
-          gender_text = '女'
-          color = 'red'
-          break
-        default:
-          gender_text = '-'
-          color = 'gray'
-          break
+      //0未知,1男,2女
+      const obj_explain: any = {
+        0: { color: 'gray' },
+        1: { color: 'blue' },
+        2: { color: 'red' },
+        default: { color: 'gray' }
       }
-      return <a-tag color={color}>{gender_text}</a-tag>
+      let field = record.gender
+      let text = record.gender_text || '-'
+      let color = obj_explain?.[field]?.color ?? obj_explain['default']['color']
+
+      return <a-tag color={color}>{text}</a-tag>
     }
   },
   {
-    title: '生日',
-    dataIndex: 'birthday'
+    title: '关系',
+    dataIndex: 'relationship',
+    width: 80,
+    render({ record }: any) {
+      //1父母,2兄妹,3子女
+      const obj_explain: any = {
+        1: { color: 'red' },
+        2: { color: 'green' },
+        3: { color: 'orange' },
+        default: { color: 'gray' }
+      }
+      let field = record.relationship
+      let text = record.relationship_text || '-'
+      let color = obj_explain?.[field]?.color ?? obj_explain['default']['color']
+
+      return <a-tag color={color}>{text}</a-tag>
+    }
   },
-  // {
-  //   title: '头像',
-  //   dataIndex: 'avatar_text',
-  //   render: ({ record }: any) => {
-  //     return <a-image shape="square" ssrc={record.avatar_text} width="50" height="50" />
-  //   }
-  // },
+  {
+    title: '身份证',
+    dataIndex: 'id_card',
+    width: 150
+  },
+  {
+    title: '生日',
+    dataIndex: 'birthday',
+    width: 150
+  },
+  {
+    title: '头像',
+    dataIndex: 'avatar_text',
+    width: 80,
+    render: ({ record }: any) => {
+      return <a-image shape="square" src={record.avatar_text} width="50" height="50" />
+    }
+  },
+  {
+    title: 'c_time',
+    dataIndex: 'c_time',
+    width: 180,
+  },
+  {
+    title: 'm_time',
+    dataIndex: 'm_time',
+    width: 180,
+  },
   {
     title: '操作',
     slotName: 'action',
@@ -100,6 +143,9 @@ const pagination = ref({
   pageSize: 20,
   total: 0
 })
+const scroll = {
+  x: 1000
+}
 
 const getList = async (page = pagination.value.current) => {
   loading.value = true

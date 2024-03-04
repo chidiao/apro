@@ -3,7 +3,7 @@
     <!-- 信息列表 -->
     <a-list :size="list_conf.size" :bordered="list_conf.bordered" class="pb-4">
       <!-- <template #header> {{ title }} </template> -->
-      <a-list-item v-for="(value, key) in user_data" :key="value.id">
+      <a-list-item v-for="(value, key) in data" :key="value.id">
         <div v-if="/^http(s)?/.test(value)" class="flex items-center">
           <span style="font-weight: bold">{{ key }}</span>
           <span>:&nbsp;&nbsp;</span>
@@ -20,7 +20,7 @@
     <!-- 底部按钮 -->
     <FixedBottomBar class="border-0 border-t-2 border-slate-300 border-solid">
       <div class="flex items-center justify-center w-full">
-        <a-button type="primary" size="large" class="m-[12px]" @click="editUserInfo">
+        <a-button type="primary" size="large" class="m-[12px]" @click="editAnalysisInfo">
           <template #icon><icon-edit /></template>
           <template #default>编辑</template>
         </a-button>
@@ -45,13 +45,12 @@ const list_conf = {
 }
 
 const router = useRouter()
-const title = '注册用户详情'
-const user_data = history.state.user_data
-delete user_data.user_pass
+const title = '分析数据详情-总'
+const data = history.state.data
 
 //编辑用户信息
-const editUserInfo = () => {
-  let err_msg = '暂不支持用户信息修改'
+const editAnalysisInfo = () => {
+  let err_msg = '暂不支持分析数据修改'
   Message.error(err_msg)
 }
 

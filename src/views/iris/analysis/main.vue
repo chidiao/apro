@@ -1,6 +1,6 @@
 <template>
   <div class="p-4">
-    <a-card title="用户列表">
+    <a-card :title="title">
       <a-table
         :columns="cols"
         :data="table"
@@ -10,11 +10,6 @@
         :pagination="pagination"
         @pageChange="(p) => getList(p)"
       >
-        <!-- 头像 -->
-        <template #user_avatar="{ record }">
-          <a-image shape="square" :src="record.avatar_text" width="50" height="50" />
-        </template>
-
         <!-- 操作 -->
         <template #action="{ record }">
           <div class="space-x-2">
@@ -29,79 +24,106 @@
 <script lang="tsx" setup>
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { getAccountList } from '@/api/account'
+import { getMainResult } from '@/api/analysis'
 import type { TableColumnData } from '@arco-design/web-vue/es/table/interface'
 
 const cols: TableColumnData[] = [
   {
     title: 'ID',
     dataIndex: 'id',
-    width: 120
+    width: 80
   },
   {
-    title: 'uid',
-    dataIndex: 'uid',
-    width: 120
+    title: 'sn',
+    dataIndex: 'sn',
+    width: 190
   },
   {
-    title: '用户名',
+    title: '主账户',
     dataIndex: 'user_realname',
-    width: 120
+    width: 100
   },
   {
-    title: '头像',
-    dataIndex: 'avatar',
-    width: 80,
+    title: '子账户',
+    dataIndex: 'sub_realname',
+    width: 100
+  },
+  {
+    title: '虹膜图像',
+    dataIndex: 'image',
+    width: 100,
     render: ({ record }: any) => {
-      return <a-image shape="square" src={record.avatar_text} width="50" height="50" />
+      return <a-image shape="square" src={record.image_text} width="50" height="50" />
     }
-  },
-  {
-    title: '昵称',
-    dataIndex: 'user_nickname',
-    width: 170
-  },
-  {
-    title: '手机号',
-    dataIndex: 'mobile',
-    width: 150
   },
   {
     title: '性别',
     dataIndex: 'gender',
-    width: 80,
+    width: 50,
     render({ record }: any) {
-      //0未知,1男,2女
-      const obj_explain: any = {
-        0: { color: 'gray' },
-        1: { color: 'blue' },
-        2: { color: 'red' },
-        default: { color: 'gray' }
-      }
       let field = record.gender
-      let text = record.gender_text || '-'
+      const obj_explain: any = {
+        0: { text: '-', color: 'gray' },
+        1: { text: '男', color: 'blue' },
+        2: { text: '女', color: 'red' },
+        default: { text: '-', color: 'gray' }
+      }
       let color = obj_explain?.[field]?.color ?? obj_explain['default']['color']
+      let text = obj_explain?.[field]?.text ?? obj_explain['default']['text']
+
+      return <a-tag color={color}>{text}</a-tag>
+    }
+  },
+  {
+    title: '眼侧',
+    dataIndex: 'eye_side',
+    width: 50,
+    render({ record }: any) {
+      let field = record.eye_side
+      const obj_explain: any = {
+        0: { text: '-', color: 'gray' },
+        1: { text: '左', color: 'green' },
+        2: { text: '右', color: 'red' },
+        default: { text: '-', color: 'gray' }
+      }
+      let color = obj_explain?.[field]?.color ?? obj_explain['default']['color']
+      let text = obj_explain?.[field]?.text ?? obj_explain['default']['text']
 
       return <a-tag color={color}>{text}</a-tag>
     }
   },
   {
     title: '状态',
-    dataIndex: 'user_status',
+    dataIndex: 'status',
     width: 120,
     render({ record }: any) {
+      let field = record.status
       const obj_explain: any = {
-        1: { color: 'green' },
-        2: { color: 'gold' },
-        3: { color: 'magenta' },
-        default: { color: 'gray' }
+        0: { text: '已上传', color: 'blue' },
+        1: { text: '分析成功', color: 'green' },
+        2: { text: '分析失败', color: 'red' },
+        default: { text: '-', color: 'gray' }
       }
-      let field = record.user_status
-      let text = record.user_status_text || '-'
       let color = obj_explain?.[field]?.color ?? obj_explain['default']['color']
+      let text = obj_explain?.[field]?.text ?? obj_explain['default']['text']
 
       return <a-tag color={color}>{text}</a-tag>
     }
+  },
+  {
+    title: '失败原因',
+    dataIndex: 'analysis_remark',
+    width: 180
+  },
+  {
+    title: '分析上传时间',
+    dataIndex: 'add_time_text',
+    width: 170
+  },
+  {
+    title: '分析结果时间',
+    dataIndex: 'up_time_text',
+    width: 170
   },
   {
     title: '操作',
@@ -112,6 +134,7 @@ const cols: TableColumnData[] = [
   }
 ]
 
+const title = '分析结果'
 const table = ref([])
 const loading = ref(false)
 const stripe = ref(true)
@@ -126,7 +149,7 @@ const scroll = {
 
 const getList = async (page = pagination.value.current) => {
   loading.value = true
-  const { data } = await getAccountList(page, pagination.value.pageSize)
+  const { data } = await getMainResult(page, pagination.value.pageSize)
   loading.value = false
   if (data) {
     let { list, current_page, page_size, total }: any = data
@@ -142,8 +165,8 @@ onMounted(() => {
 
 const router = useRouter()
 const toDetail = (record: any) => {
-  const user_data = { user_data: Object.assign({}, record) }
-  router.push({ name: 'accountMainDetail', state: user_data })
+  const data = { data: Object.assign({}, record) }
+  router.push({ name: 'irisAnalysisMainDetail', state: data })
   // router.push({ path: `main/detail`, query: record })//参数暴露于url,且数据过大时受url限制
   // https://github.com/vuejs/router/blob/main/packages/router/CHANGELOG.md#414-2022-08-22
   // router.push({ name: 'accountMainDetail', params: record })//接收不到params参数;动态路由可配合使用
