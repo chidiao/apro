@@ -2,8 +2,8 @@ import { DEFAULT_LAYOUT } from '../base'
 import { AppRouteRecordRaw } from '../types'
 
 const HOME: AppRouteRecordRaw = {
-  path: '/app',
-  name: 'app',
+  path: '/',
+  name: 'root',
   component: DEFAULT_LAYOUT,
   redirect: '/home',
   meta: {
@@ -15,7 +15,7 @@ const HOME: AppRouteRecordRaw = {
   },
   children: [
     {
-      path: '/home',
+      path: 'home',
       name: 'Home',
       component: () => import('@/views/home/index.vue'),
       meta: {

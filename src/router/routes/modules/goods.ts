@@ -47,7 +47,7 @@ const GOODS: AppRouteRecordRaw = {
       name: 'goodsLong',
       component: () => import('@/views/goods/long.vue'),
       meta: {
-        locale: '长页面',
+        locale: 'vModel封装',
         requiresAuth: true,
         roles: ['*']
       }
