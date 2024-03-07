@@ -35,7 +35,7 @@
             <a-popconfirm
               type="warning"
               content="确定删除？"
-              :on-before-ok="() => onDel(record.goods_uid)"
+              :on-before-ok="(done) => onDel(record.goods_uid, done)"
               @ok="getTable"
             >
               <a-button type="primary" status="danger">删除</a-button>
@@ -113,14 +113,16 @@ const onSubmit = () => {
   console.log(form.value)
   getTable()
 }
-const onDel = async (uid = null) => {
-  if (!uid) return false
+const onDel = async (uid?: string, done: (closed: boolean) => void) => {
+  if (!uid) {
+    done(false)
+  }
 
   try {
     await deleteGood(uid)
-    return true
+    done(true)
   } catch {
-    return false
+    done(false)
   }
 }
 
