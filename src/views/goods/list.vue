@@ -32,7 +32,12 @@
 
             <a-button type="primary" @click="toDetail(record.goods_uid)">详情</a-button>
 
-            <a-popconfirm type="warning" content="确定删除？" @ok="onDel(record.goods_uid)">
+            <a-popconfirm
+              type="warning"
+              content="确定删除？"
+              :on-before-ok="() => onDel(record.goods_uid)"
+              @ok="getTable"
+            >
               <a-button type="primary" status="danger">删除</a-button>
             </a-popconfirm>
           </div>
@@ -109,11 +114,14 @@ const onSubmit = () => {
   getTable()
 }
 const onDel = async (uid = null) => {
-  if (!uid) return
+  if (!uid) return false
 
-  loading.value = true
-  await deleteGood(uid)
-  getTable()
+  try {
+    await deleteGood(uid)
+    return true
+  } catch {
+    return false
+  }
 }
 
 const router = useRouter()
